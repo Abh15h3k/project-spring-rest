@@ -1,5 +1,7 @@
 package com.kloudspot.controller;
 
+import com.kloudspot.configuration.JwtUtil;
+import com.kloudspot.configuration.MyUserDetailsService;
 import com.kloudspot.models.LoginDTO;
 import com.kloudspot.models.RegistrationDTO;
 import com.kloudspot.models.User;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,12 @@ public class AuthenticationController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @GetMapping("")
     public ResponseEntity<String> home() {
@@ -63,7 +72,11 @@ public class AuthenticationController {
                 loginDTO.getEmailId(), loginDTO.getPassword()
         ));
 
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(loginDTO.getEmailId());
+
+        String jwt = jwtUtil.generateToken(userDetails);
+
         LOGGER.info("Authenticated");
-        return ResponseEntity.ok("Welcome");
+        return ResponseEntity.ok(jwt);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfigurator extends WebSecurityConfigurerAdapter {
@@ -16,14 +17,18 @@ public class SecurityConfigurator extends WebSecurityConfigurerAdapter {
     @Autowired
     MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    JwtFilter jwtFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth-api/**").permitAll();
-//                .antMatchers("/user-api/**").hasAnyRole("ADMIN")
-//                .antMatchers("/product-api/**").hasAnyRole("USER", "ADMIN");
+                .antMatchers("/auth-api/**").permitAll()
+                .antMatchers("/user-api/**").hasAnyRole("ADMIN")
+                .antMatchers("/product-api/**").hasAnyRole("USER", "ADMIN");
 
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         super.configure(http);
     }
 
