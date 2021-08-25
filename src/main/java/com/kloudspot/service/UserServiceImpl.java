@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User addedUser = userRepository.insert(user);
+	    addedUser.setPassword(null);
         return addedUser;
 	}
 
