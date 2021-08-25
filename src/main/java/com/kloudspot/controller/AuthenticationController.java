@@ -44,19 +44,11 @@ public class AuthenticationController {
         return ResponseEntity.ok("Welcome to auth-api.");
     }
 
-    @GetMapping("/home")
-    public ResponseEntity<String> home2() {
-        return ResponseEntity.ok("Welcome to auth-api.");
-    }
-
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegistrationDTO registrationDTO) {
-        LOGGER.info(registrationDTO.toString());
 
         String encodedPassword = passwordEncoder.encode(registrationDTO.getPassword());
-
-        User user = new User(-1, registrationDTO.getFirstname(), registrationDTO.getLastname(), registrationDTO.getEmailId(), encodedPassword, registrationDTO.getAddress(), Arrays.asList("USER"));
-
+        User user = new User(-1, registrationDTO.getFirstname(), registrationDTO.getLastname(), registrationDTO.getEmailId(), encodedPassword, registrationDTO.getAddress(), Arrays.asList("ROLE_USER"));
         user = userService.addUser(user);
 
         return ResponseEntity.ok(user);
@@ -64,9 +56,6 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
-        LOGGER.info(loginDTO.toString());
-
-        String encodedPassword = passwordEncoder.encode(loginDTO.getPassword());
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDTO.getEmailId(), loginDTO.getPassword()
@@ -76,7 +65,6 @@ public class AuthenticationController {
 
         String jwt = jwtUtil.generateToken(userDetails);
 
-        LOGGER.info("Authenticated");
         return ResponseEntity.ok(jwt);
     }
 }

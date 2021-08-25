@@ -6,6 +6,7 @@ import com.kloudspot.models.User;
 import com.kloudspot.service.UserService;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,16 +18,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/user-api")
 public class UserController {
 
     @Autowired private UserService userService;
-    @Autowired private static Logger LOGGER;
+    private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping("/home")
-    public ResponseEntity<String> userHome() {
-        return ResponseEntity.ok("Welcome to user-api.");
+    @GetMapping("")
+    public ResponseEntity<String> userHome(HttpServletRequest httpServletRequest) {
+        String username = (String)httpServletRequest.getAttribute("username");
+
+        return ResponseEntity.ok("Welcome to user-api, " + username);
     }
 
     @GetMapping("/users")
