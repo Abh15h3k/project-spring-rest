@@ -83,6 +83,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User addUser(User user) {
+	    if (user.getId() < 0) {
+	        user.setId((int)userRepository.count()+1);
+        }
+
         User addedUser = userRepository.insert(user);
         return addedUser;
 	}

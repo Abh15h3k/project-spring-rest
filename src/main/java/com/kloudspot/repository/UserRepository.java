@@ -7,6 +7,7 @@ import com.kloudspot.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, Integer> {
+    User findByEmailId(String emailId);
     List<User> findByFirstName(String name);
     List<User> findByLastName(String name);
     List<User> findByAddressCity(String city);
