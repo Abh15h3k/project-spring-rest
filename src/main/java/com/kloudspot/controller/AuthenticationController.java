@@ -20,6 +20,8 @@ import java.util.Arrays;
 
 @RestController()
 @RequestMapping("/auth-api")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class AuthenticationController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);

@@ -5,18 +5,24 @@ import java.util.List;
 import com.kloudspot.models.Product;
 import com.kloudspot.service.ProductService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product-api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired private ProductService productService;
 
     @GetMapping("")
     public ResponseEntity<String> productHome() {
+        LOGGER.info("In access test endpoint.");
         return ResponseEntity.ok("Welcome to product-api.");
     }
 
